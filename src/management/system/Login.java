@@ -3,6 +3,8 @@ package management.system;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.sql.*;
+
 
 public class Login extends JFrame implements ActionListener {
     
@@ -56,7 +58,26 @@ public class Login extends JFrame implements ActionListener {
             // You can implement login logic here
             String username = tfuserName.getText();
             String password = new String(tfpwd.getPassword());
-            JOptionPane.showMessageDialog(this, "Username: " + username + "\nPassword: " + password);
+//            JOptionPane.showMessageDialog(this, "Username: " + username + "\nPassword: " + password);
+            
+            try {
+                Conn c = new Conn();
+                
+                String query = "select * from login where username = '" + username + "' and password = '" + password + "'";
+                ResultSet rs = c.s.executeQuery(query);
+                
+                if(rs.next()) {
+//                    System.out.println("Valid");
+
+                    new Home();
+                    setVisible(false);
+                   
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid Username or Passwoard");
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         } else if (ae.getSource() == close) {
             setVisible(false);
         } else if (ae.getSource() == reset) {
